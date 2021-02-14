@@ -12,9 +12,9 @@ function exit() {
     const quiz = localStorage.getItem("quiz");
 
     // set score factors
-    const correctPoints = 6;
-    const blankPoints = 1.5;
-    const wrongPoints = 0;
+    const correctPoints = localStorage.getItem("correct-points");
+    const blankPoints = localStorage.getItem("blank-points");
+    const wrongPoints = localStorage.getItem("incorrect-points");
 
     //Time in seconds for countdown timer
     const totalTime = localStorage.getItem("time-limit") * 60;
@@ -106,7 +106,7 @@ function exit() {
                                 data['quiz'] = quiz;
                                 data['Start'] = startTime;
                                 $.ajax({
-                                    url: 'https://script.google.com/macros/s/AKfycbz7cE2k_h8VMNbfXTiREI5mc-P9xz6hKo59WVHYfk5y7df4GTP8/exec',
+                                    url: 'https://script.google.com/macros/s/AKfycbyk0zW3toH073872pM6_YcGSqTnxeBbSWrsC7GKeK0sZTDm2V8neDePJw/exec',
                                     method: "POST", dataType: "json", data: data,
                                     success: function (o) {
                                         $.ajax({
@@ -312,7 +312,7 @@ function exit() {
 
             $("#loadQuiz").hide();
             $.ajax({
-                url: 'https://script.google.com/macros/s/AKfycbz7cE2k_h8VMNbfXTiREI5mc-P9xz6hKo59WVHYfk5y7df4GTP8/exec',
+                url: 'https://script.google.com/macros/s/AKfycbyk0zW3toH073872pM6_YcGSqTnxeBbSWrsC7GKeK0sZTDm2V8neDePJw/exec',
                 method: "POST", dataType: "json", data: data,
                 success: function (o) {
                     $.ajax({
@@ -587,7 +587,7 @@ function exit() {
         }
     }
 
-    function getQuestions(callback) {
+    function getQuestions() {
         $.ajax({
             url: 'https://script.google.com/macros/s/AKfycbwoTxPRGLrIFBhwZCHVl4sqE9mVwDdB6znxXbmDztzD6-bmU8Ct/exec',
             method: "GET",
@@ -595,7 +595,7 @@ function exit() {
             data: { "quiz": quiz }
         })
         .done(function(data) {
-            callback(data.questions);
+            setup(data.questions);
         });
     }
 
@@ -630,7 +630,7 @@ function exit() {
                             if (!finished) return 'Are you sure you want to leave?';
                         });
 
-                        getQuestions(setup);
+                        getQuestions();
                     }
                     break;
                 }
