@@ -8,6 +8,7 @@ function loadQuiz(q, t) {
     let data = {};
     data['user'] = localStorage.getItem("username");
     data['pswrd'] = localStorage.getItem("password");
+    data['quizInfo'] = q;
     $.ajax({
         url: 'https://script.google.com/macros/s/AKfycbyk0zW3toH073872pM6_YcGSqTnxeBbSWrsC7GKeK0sZTDm2V8neDePJw/exec',
         method: "GET",
