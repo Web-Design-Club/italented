@@ -464,15 +464,15 @@ button:focus {
   padding-right: 200px;
   vertical-align: top;
 }
-#admin-portal #student-heading, #admin-portal #quiz-heading {
+#admin-portal #student-heading, #admin-portal #quiz-heading, #admin-portal #group-heading {
   width: 250px;
   font-size: 24px;
   font-weight: 500;
 }
-#admin-portal #student-heading span, #admin-portal #quiz-heading span {
+#admin-portal #student-heading span, #admin-portal #quiz-heading span, #admin-portal #group-heading span {
   float: right;
 }
-#admin-portal #student-heading span:hover, #admin-portal #quiz-heading span:hover {
+#admin-portal #student-heading span:hover, #admin-portal #quiz-heading span:hover, #admin-portal #group-heading span:hover {
   cursor: pointer;
 }
 #admin-portal #student-list, #admin-portal #quiz-list {

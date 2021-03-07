@@ -10,6 +10,11 @@ function loadQuiz(q, t) {
     location.href = `test.html`;
 }
 
+function loadResults(q) {
+    localStorage.setItem("quiz", q);
+    location.href = `results.html`;
+}
+
 (function() {
     $("#loadButtons").show();
     let user = localStorage.getItem("username");
@@ -72,7 +77,7 @@ function loadQuiz(q, t) {
             for (let i = 1; i < details.length; i++) {
                 if (details[i] != '') {
                     if (details[i][3] !== "") {
-                        dashboard += `<tr>
+                        dashboard += `<tr class = "clickable" onclick="loadResults('${details[i][0]}');">
                             <td id="quiz${i}">${details[i][0]}</td>
                             <td>Graded</td>
                             <td>${details[i][3]}</td>
