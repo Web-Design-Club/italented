@@ -52,6 +52,7 @@ function exit() {
     function setup(questions) {
         function buildQuiz() {
             let quizHtml = ``;
+            let questionListHtml = ``;
             let numOfMult = questions.length;
 
             for (let i = 0; i < questions.length; i++) {
@@ -73,18 +74,22 @@ function exit() {
                         <span class="mc open"></span>
                         Leave blank
                     </label>`;
-                    quizHtml += `<div class="question" id="question${i+1}"> ${i + 1}. ${question.question} </div>`;
+                quizHtml += `<div class="question" id="question${i+1}"> ${i + 1}. ${question.question} </div>`;
                 if (question.image) {
                     quizHtml += `<div id="image${i+1}"><img src="https://drive.google.com/uc?export=view&id=${question.image}"></div>`;
                 }
                 quizHtml += `<div class="answers" id="answers${i+1}">${answers}</div>`;
+                questionListHtml += `<div class="questionButton" id="questionButton${i+1}"><a href="#question${i+1}">${i+1}</a></div>`;
             }
             $('#title').html(localStorage.getItem("quiz"));
             $('#quiz').html(quizHtml);
+            $('#questionList').html(questionListHtml);
+            console.log(questionListHtml);
             for (let q = pageSize+1; q <= questions.length; q++){
                 $(`#question${q}`).hide();
                 $(`#image${q}`).hide();
                 $(`#answers${q}`).hide();
+                $(`#questionButton${q}`).hide();
             }
 
             // building timer/counter
@@ -554,12 +559,14 @@ function exit() {
                 $(`#question${currentPage*5+q}`).hide();
                 $(`#image${currentPage*5+q}`).hide();
                 $(`#answers${currentPage*5+q}`).hide();
+                $(`#questionButton${currentPage*5+q}`).hide();
             }
             currentPage++;
             for (let q = 1; q < pageSize+1; q++){
                 $(`#question${currentPage*5+q}`).show();
                 $(`#image${currentPage*5+q}`).show();
                 $(`#answers${currentPage*5+q}`).show();
+                $(`#questionButton${currentPage*5+q}`).show();
             }
             $('#previous').prop('disabled', false);
             if (currentPage == totalPages-1) {
@@ -573,12 +580,14 @@ function exit() {
                 $(`#question${currentPage*5+q}`).hide();
                 $(`#image${currentPage*5+q}`).hide();
                 $(`#answers${currentPage*5+q}`).hide();
+                $(`#questionButton${currentPage*5+q}`).hide();
             }
             currentPage--;
             for (let q = 1; q < pageSize+1; q++){
                 $(`#question${currentPage*5+q}`).show();
                 $(`#image${currentPage*5+q}`).show();
                 $(`#answers${currentPage*5+q}`).show();
+                $(`#questionButton${currentPage*5+q}`).show();
             }
             $('#next').prop('disabled', false);
             if (currentPage == 0) {

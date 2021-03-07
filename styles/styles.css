@@ -215,6 +215,25 @@ button:focus {
   color: #000000;
 }
 
+#questionList {
+  margin-top: 130px;
+  margin-left: 75vw;
+  position: fixed;
+}
+
+.questionButton {
+  font-family: Montserrat, Arial;
+  font-weight: 400;
+  font-size: 18px;
+}
+.questionButton a {
+  color: #000000;
+}
+.questionButton a:hover {
+  color: #000000;
+  text-decoration: none;
+}
+
 #title {
   margin-top: 70px;
   margin-left: 100px;
@@ -584,3 +603,5 @@ button:focus {
   text-decoration: none;
   cursor: pointer;
 }
+
+/*# sourceMappingURL=styles.css.map */
