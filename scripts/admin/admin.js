@@ -1,5 +1,5 @@
 const userUrl = 'https://script.google.com/macros/s/AKfycbwqvNVeFbXM7mRUniqGfoO-KDfCNn0dpWZH1COiiLh5SPvs9Ig/exec';
-const quizUrl = 'https://script.google.com/macros/s/AKfycbz7cE2k_h8VMNbfXTiREI5mc-P9xz6hKo59WVHYfk5y7df4GTP8/exec';
+const quizUrl = 'https://script.google.com/macros/s/AKfycbyk0zW3toH073872pM6_YcGSqTnxeBbSWrsC7GKeK0sZTDm2V8neDePJw/exec';
 
 const getUserData = (data, callback) => { $.ajax({ url: userUrl, method: "GET", dataType: "json", data: data, success: callback }); }
 const postUserData = (data, callback) => { $.ajax({ url: userUrl, method: "POST", dataType: "json", data: data, success: callback }); }
@@ -100,7 +100,19 @@ function addStudent() {
     data['Last Name'] = last;
     data['newStudent'] = true;
     postUserData(data, o => {
-        postQuizData(data, o => $('#new-student').hide())
+        postQuizData(data, o => {
+            data['studentList'] = true;
+            getUserData(data, o => {
+                if (o.correct) {
+                    let students = '';
+                    for (const student of o.students) {
+                        students += `<div onclick="studentDetails('${student[0]} ${student[1]}');">${student[0]} ${student[1]}</div>`;
+                    }
+                    $('#student-list').html(students);
+                    $('#new-student').hide();
+                }
+            });
+        });
     });
 }
 
@@ -108,6 +120,9 @@ function addQuiz() {
     let quizName = $('#new-quiz #quiz-name').val();
     let timeLimit = $('#new-quiz #time-limit').val();
     let questionCount = $('#new-quiz #question-count').val();
+    let correctPoints = $('#new-quiz #correct-points').val();
+    let incorrectPoints = $('#new-quiz #incorrect-points').val();
+    let blankPoints = $('#new-quiz #blank-points').val();
     let data = {};
     data['user'] = localStorage.getItem("user");
     data['pswrd'] = localStorage.getItem("pass");
@@ -115,7 +130,22 @@ function addQuiz() {
     data['Quiz'] = quizName;
     data['Time Limit'] = timeLimit;
     data['Question Count'] = questionCount;
-    postQuizData(data, o => $('#new-quiz').hide());
+    data['Correct Points'] = correctPoints;
+    data['Incorrect Points'] = incorrectPoints;
+    data['Blank Points'] = blankPoints;
+    postQuizData(data, o => {
+        data['quizList'] = true;
+        getQuizData(data, o => {
+            if (o.correct) {
+                let quizzes = '';
+                for (const quiz of o.quizzes) {
+                    quizzes += `<div onclick="quizDetails('${quiz[0]}');">${quiz[0]}</div>`
+                }
+                $('#quiz-list').html(quizzes);
+                $('#new-quiz').hide();
+            }
+        });
+    });
 }
 
 function reset() {

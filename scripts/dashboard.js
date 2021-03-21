@@ -5,9 +5,24 @@ function logout() {
 }
 
 function loadQuiz(q, t) {
-    localStorage.setItem("quiz", q);
-    localStorage.setItem("time-limit", t);
-    location.href = `test.html`;
+    let data = {};
+    data['user'] = localStorage.getItem("username");
+    data['pswrd'] = localStorage.getItem("password");
+    data['quizInfo'] = q;
+    $.ajax({
+        url: 'https://script.google.com/macros/s/AKfycbyk0zW3toH073872pM6_YcGSqTnxeBbSWrsC7GKeK0sZTDm2V8neDePJw/exec',
+        method: "GET",
+        dataType: "json",
+        data: data,
+        success: function (o) {
+            localStorage.setItem("quiz", q);
+            localStorage.setItem("time-limit", t);
+            localStorage.setItem("correct-points", o.info[3]);
+            localStorage.setItem("incorrect-points", o.info[4]);
+            localStorage.setItem("blank-points", o.info[5]);
+            location.href = `test.html`;
+        }
+    });
 }
 
 function loadResults(q) {

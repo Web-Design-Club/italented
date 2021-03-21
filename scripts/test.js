@@ -12,9 +12,9 @@ function exit() {
     const quiz = localStorage.getItem("quiz");
 
     // set score factors
-    const correctPoints = 6;
-    const blankPoints = 1.5;
-    const wrongPoints = 0;
+    const correctPoints = localStorage.getItem("correct-points");
+    const blankPoints = localStorage.getItem("blank-points");
+    const wrongPoints = localStorage.getItem("incorrect-points");
 
     //Time in seconds for countdown timer
     const totalTime = localStorage.getItem("time-limit") * 60;
@@ -52,6 +52,7 @@ function exit() {
     function setup(questions) {
         function buildQuiz() {
             let quizHtml = ``;
+            let questionListHtml = ``;
             let numOfMult = questions.length;
 
             for (let i = 0; i < questions.length; i++) {
@@ -73,18 +74,22 @@ function exit() {
                         <span class="mc open"></span>
                         Leave blank
                     </label>`;
-                    quizHtml += `<div class="question" id="question${i+1}"> ${i + 1}. ${question.question} </div>`;
+                quizHtml += `<div class="question" id="question${i+1}"> ${i + 1}. ${question.question} </div>`;
                 if (question.image) {
                     quizHtml += `<div id="image${i+1}"><img src="https://drive.google.com/uc?export=view&id=${question.image}"></div>`;
                 }
                 quizHtml += `<div class="answers" id="answers${i+1}">${answers}</div>`;
+                questionListHtml += `<div class="questionButton" id="questionButton${i+1}"><a href="#question${i+1}">${i+1}</a></div>`;
             }
             $('#title').html(localStorage.getItem("quiz"));
             $('#quiz').html(quizHtml);
+            $('#questionList').html(questionListHtml);
+            console.log(questionListHtml);
             for (let q = pageSize+1; q <= questions.length; q++){
                 $(`#question${q}`).hide();
                 $(`#image${q}`).hide();
                 $(`#answers${q}`).hide();
+                $(`#questionButton${q}`).hide();
             }
 
             // building timer/counter
@@ -106,7 +111,7 @@ function exit() {
                                 data['quiz'] = quiz;
                                 data['Start'] = startTime;
                                 $.ajax({
-                                    url: 'https://script.google.com/macros/s/AKfycbz7cE2k_h8VMNbfXTiREI5mc-P9xz6hKo59WVHYfk5y7df4GTP8/exec',
+                                    url: 'https://script.google.com/macros/s/AKfycbyk0zW3toH073872pM6_YcGSqTnxeBbSWrsC7GKeK0sZTDm2V8neDePJw/exec',
                                     method: "POST", dataType: "json", data: data,
                                     success: function (o) {
                                         $.ajax({
@@ -312,7 +317,7 @@ function exit() {
 
             $("#loadQuiz").hide();
             $.ajax({
-                url: 'https://script.google.com/macros/s/AKfycbz7cE2k_h8VMNbfXTiREI5mc-P9xz6hKo59WVHYfk5y7df4GTP8/exec',
+                url: 'https://script.google.com/macros/s/AKfycbyk0zW3toH073872pM6_YcGSqTnxeBbSWrsC7GKeK0sZTDm2V8neDePJw/exec',
                 method: "POST", dataType: "json", data: data,
                 success: function (o) {
                     $.ajax({
@@ -554,12 +559,14 @@ function exit() {
                 $(`#question${currentPage*5+q}`).hide();
                 $(`#image${currentPage*5+q}`).hide();
                 $(`#answers${currentPage*5+q}`).hide();
+                $(`#questionButton${currentPage*5+q}`).hide();
             }
             currentPage++;
             for (let q = 1; q < pageSize+1; q++){
                 $(`#question${currentPage*5+q}`).show();
                 $(`#image${currentPage*5+q}`).show();
                 $(`#answers${currentPage*5+q}`).show();
+                $(`#questionButton${currentPage*5+q}`).show();
             }
             $('#previous').prop('disabled', false);
             if (currentPage == totalPages-1) {
@@ -573,12 +580,14 @@ function exit() {
                 $(`#question${currentPage*5+q}`).hide();
                 $(`#image${currentPage*5+q}`).hide();
                 $(`#answers${currentPage*5+q}`).hide();
+                $(`#questionButton${currentPage*5+q}`).hide();
             }
             currentPage--;
             for (let q = 1; q < pageSize+1; q++){
                 $(`#question${currentPage*5+q}`).show();
                 $(`#image${currentPage*5+q}`).show();
                 $(`#answers${currentPage*5+q}`).show();
+                $(`#questionButton${currentPage*5+q}`).show();
             }
             $('#next').prop('disabled', false);
             if (currentPage == 0) {
@@ -587,7 +596,7 @@ function exit() {
         }
     }
 
-    function getQuestions(callback) {
+    function getQuestions() {
         $.ajax({
             url: 'https://script.google.com/macros/s/AKfycbwoTxPRGLrIFBhwZCHVl4sqE9mVwDdB6znxXbmDztzD6-bmU8Ct/exec',
             method: "GET",
@@ -595,7 +604,7 @@ function exit() {
             data: { "quiz": quiz }
         })
         .done(function(data) {
-            callback(data.questions);
+            setup(data.questions);
         });
     }
 
@@ -630,7 +639,7 @@ function exit() {
                             if (!finished) return 'Are you sure you want to leave?';
                         });
 
-                        getQuestions(setup);
+                        getQuestions();
                     }
                     break;
                 }
