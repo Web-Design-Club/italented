@@ -31,6 +31,7 @@ function exit() {
 
     // short answer questions array
     const shortAnswerQuestions = [];
+    //shortAnswerQuestions.push({question: "What is 1.25*2?", correctAnswer: ["5/2","2.5"], answer: ""});
     // const shortAnswerQuestions = [
     //     {
     //         question: "What is 1.25*2?",
@@ -59,27 +60,43 @@ function exit() {
                 const question = questions[i];
                 let answers = ``;
                 let j = 1;
-                for (answer in question.answers) {
+
+                //if the question is a frq
+                if (question.answers["a"] == "frq"){
+
+                    answers +=
+                    `<label id="shortAnswerLabel${i+1}">
+                        <input type="text" class="short-answer shortAnswersBoxes" name="shortAnswers${i+1}">
+                    </label>`;
+
+
+
+                }
+                //if the question is a mcq
+                else{
+                    for (answer in question.answers) {
+                        answers += 
+                            `<label class="mc-container" id="question${i+1}-answer${j}">
+                                <input type="radio" name="question${i+1}" value="${answer}">
+                                <span class="mc open"></span>
+                                ${answer}: ${question.answers[answer]}
+                            </label>`;
+                        j++;
+                    }
                     answers += 
                         `<label class="mc-container" id="question${i+1}-answer${j}">
-                            <input type="radio" name="question${i+1}" value="${answer}">
+                            <input type="radio" name="question${i+1}" value="blank" checked="checked">
                             <span class="mc open"></span>
-                            ${answer}: ${question.answers[answer]}
+                            Leave blank
                         </label>`;
-                    j++;
                 }
-                answers += 
-                    `<label class="mc-container" id="question${i+1}-answer${j}">
-                        <input type="radio" name="question${i+1}" value="blank" checked="checked">
-                        <span class="mc open"></span>
-                        Leave blank
-                    </label>`;
                 quizHtml += `<div class="question" id="question${i+1}"> ${i + 1}. ${question.question} </div>`;
                 if (question.image) {
                     quizHtml += `<div id="image${i+1}"><img src="https://drive.google.com/uc?export=view&id=${question.image}"></div>`;
                 }
                 quizHtml += `<div class="answers" id="answers${i+1}">${answers}</div>`;
                 questionListHtml += `<div class="questionButton" id="questionButton${i+1}"><a href="#question${i+1}">${i+1}</a></div>`;
+                
             }
             $('#title').html(localStorage.getItem("quiz"));
             $('#quiz').html(quizHtml);
@@ -106,7 +123,11 @@ function exit() {
                                 time = totalTime - (Date.now() - item[2]) / 1000;
                             } else {
                                 // api call to store start time
-                                let startTime = Date.now();
+                                let currentdate = new Date();
+                                let startTime = (currentdate.getMonth() + 1)
+                                + "/" + currentdate.getDate() + "/" + currentdate.getFullYear() + " @ " 
+                                + currentdate.getHours() + ":" 
+                                + currentdate.getMinutes() + ":" + currentdate.getSeconds()
                                 console.log(startTime)
                                 data['quiz'] = quiz;
                                 data['Start'] = startTime;
@@ -243,55 +264,83 @@ function exit() {
                 let container = quest[0];
                 let userAnswer = null;
                 const selected = $(container).find(`input[name=question${i+1}]:checked`);
-                
-                // lock mc buttons
-                for (let j = 0; j < Object.keys(question.answers).length + 1; j++) {
-                    document.getElementsByName(`question${i+1}`)[j].disabled = true;
-                }
 
-                // find num of selected answer choice
-                let selectedNum = null;
-                if (selected.length > 0) {
-                    selectedNum = selected[0].value.charCodeAt(0)-96;
-                }
+                //detects if question is frq type
+                if (question.answers["a"] == "frq"){
+                    // lock frq input
+                    document.getElementsByName(`shortAnswers${i+1}`)[0].disabled = true;
 
-                // get and style correctAnswerBox (cab)
-                const correctAnswerNum = question.answer.charCodeAt(0)-96;
-                const cab = document.getElementById(`question${i+1}-answer${correctAnswerNum}`);
-                cab.style.display = "inline-block";
-                cab.style.paddingRight = "20px";
+                    let rect = document.getElementsByName(`shortAnswers${i+1}`)[0];
 
-                // color the correct/selected answers
-                if (selected.length > 0) {
-                    userAnswer = selected[0].value;
+                    //compare answer choice
+                    if(document.getElementsByName(`shortAnswers${i+1}`)[0].value == question.answer){
+                        numCorrect++;
+                        userAnswer = document.getElementsByName(`shortAnswers${i+1}`)[0].value;
+                        rect.style.backgroundColor = 'rgb(121, 203, 69, .5)';
+                    }
+                    else if(document.getElementsByName(`shortAnswers${i+1}`)[0].value == ""){
+                        numBlank++;
+                        userAnswer = 'blank'
+                        rect.style.backgroundColor = 'rgb(255, 210, 49, .5)';
+                    }
+                    else {
+                        numWrong++;
+                        userAnswer = document.getElementsByName(`shortAnswers${i+1}`)[0].value;
+                        rect.style.backgroundColor = 'rgb(217, 60, 33, 0.5)';
+                    }
                 }
-                if (userAnswer === question.answer) {
-                    numCorrect++;
-                    cab.style.backgroundColor = "rgb(121, 203, 69, .5)";
-                    cab.style.boxShadow = "0px 0px 0px 4px rgb(121, 203, 69, .5)";
-                } else if (userAnswer === 'blank') {
-                    numBlank++;
-                    // style selectedBox
-                    const numChoices = Object.keys(question.answers).length;
-                    const sb = document.getElementById(`question${i+1}-answer${numChoices + 1}`);
-                    sb.style.paddingRight = "20px";
-                    sb.style.backgroundColor = "rgb(255, 210, 49, .5)";
-                    sb.style.boxShadow = "0px 0px 0px 4px rgb(255, 210, 49, .5)";
-                    // style correctAnswerBox
-                    cab.style.boxShadow = "0px 0px 0px 4px rgb(121, 203, 69, .5)";
-                    // cab.boxSizing = "border-box";
-                    // questionText.style.color = 'red';
-                } else {
-                    numWrong++;
-                    // style selectedBox
-                    const sb = document.getElementById(`question${i+1}-answer${selectedNum}`);
-                    sb.style.paddingRight = "20px";
-                    sb.style.backgroundColor = "rgb(217, 60, 33, 0.5)";
-                    sb.style.boxShadow = "0px 0px 0px 4px rgb(217, 60, 33, 0.5)";
-                    // style correctAnswerBox
-                    cab.style.boxShadow = "0px 0px 0px 4px rgb(121, 203, 69, .5)";
-                    // cab.boxSizing = "border-box";  
-                    // questionText.style.color = 'red';
+                //mcq type 
+                else {
+                    // lock mc buttons
+                    for (let j = 0; j < Object.keys(question.answers).length + 1; j++) {
+                        document.getElementsByName(`question${i+1}`)[j].disabled = true;
+                    }
+
+                    // find num of selected answer choice
+                    let selectedNum = null;
+                    if (selected.length > 0) {
+                        selectedNum = selected[0].value.charCodeAt(0)-96;
+                    }
+
+                    // get and style correctAnswerBox (cab)
+                    const correctAnswerNum = question.answer.charCodeAt(0)-96;
+                    const cab = document.getElementById(`question${i+1}-answer${correctAnswerNum}`);
+                    cab.style.display = "inline-block";
+                    cab.style.paddingRight = "20px";
+
+                    // color the correct/selected answers
+                    if (selected.length > 0) {
+                        userAnswer = selected[0].value;
+                    }
+                    if (userAnswer === question.answer) {
+                        numCorrect++;
+                        cab.style.backgroundColor = "rgb(121, 203, 69, .5)";
+                        cab.style.boxShadow = "0px 0px 0px 4px rgb(121, 203, 69, .5)";
+                    } else if (userAnswer === 'blank') {
+                        numBlank++;
+                        // style selectedBox
+                        const numChoices = Object.keys(question.answers).length;
+                        const sb = document.getElementById(`question${i+1}-answer${numChoices + 1}`);
+                        sb.style.paddingRight = "20px";
+                        sb.style.backgroundColor = "rgb(255, 210, 49, .5)";
+                        sb.style.boxShadow = "0px 0px 0px 4px rgb(255, 210, 49, .5)";
+                        // style correctAnswerBox
+                        cab.style.boxShadow = "0px 0px 0px 4px rgb(121, 203, 69, .5)";
+                        // cab.boxSizing = "border-box";
+                        // questionText.style.color = 'red';
+                    } else {
+                        numWrong++;
+                        // style selectedBox
+                        const sb = document.getElementById(`question${i+1}-answer${selectedNum}`);
+                        sb.style.paddingRight = "20px";
+                        sb.style.backgroundColor = "rgb(217, 60, 33, 0.5)";
+                        sb.style.boxShadow = "0px 0px 0px 4px rgb(217, 60, 33, 0.5)";
+                        // style correctAnswerBox
+                        cab.style.boxShadow = "0px 0px 0px 4px rgb(121, 203, 69, .5)";
+                        // cab.boxSizing = "border-box";  
+                        // questionText.style.color = 'red';
+                    }
+                    
                 }
                 data[`Question ${i+1}`] = userAnswer;
             }
