@@ -463,9 +463,9 @@ body {
 #mission h1 {
   position: absolute;
   top: 17%;
-  width: 100%;
+  margin: 25px 15vw;
   text-align: center;
-  font-size: 60px;
+  font-size: 24px;
   color: #FFFFFF;
 }
 
@@ -514,3 +514,5 @@ div h2 {
   font-weight: 400;
   color: #646464;
 }
+
+/*# sourceMappingURL=styles.css.map */
