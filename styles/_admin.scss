@@ -39,11 +39,11 @@ $left-offset: 20vw;
 
     td {
         padding-left: 0px;
-        padding-right: 200px;
+        padding-right: 100px;
         vertical-align: top;
     }
 
-    #student-heading, #quiz-heading {
+    #student-heading, #quiz-heading, #class-heading {
         width: 250px;
         font-size: 24px;
         font-weight: 500;
@@ -57,7 +57,7 @@ $left-offset: 20vw;
         }
     }
 
-    #student-list, #quiz-list {
+    #student-list, #quiz-list, #class-list {
         margin-top: 24px;
         margin-bottom: 72px;
 
@@ -71,7 +71,7 @@ $left-offset: 20vw;
     }
 }
 
-#student-details, #student-quiz-details, #quiz-details {
+#student-details, #student-quiz-details, #quiz-details, #class-details {
     margin-left: $left-offset;
     font-family: $font;
 

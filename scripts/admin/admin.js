@@ -1,10 +1,13 @@
 const userUrl = 'https://script.google.com/macros/s/AKfycbwqvNVeFbXM7mRUniqGfoO-KDfCNn0dpWZH1COiiLh5SPvs9Ig/exec';
 const quizUrl = 'https://script.google.com/macros/s/AKfycbyk0zW3toH073872pM6_YcGSqTnxeBbSWrsC7GKeK0sZTDm2V8neDePJw/exec';
+const classUrl = 'https://script.google.com/macros/s/AKfycbzr-MeaySZQVQA_z6f3-JyCMKYpnSWVuhuCVoxcQvUJgpPHj8k76fpgPtrD5Ilzo0AM/exec';
 
 const getUserData = (data, callback) => { $.ajax({ url: userUrl, method: "GET", dataType: "json", data: data, success: callback }); }
 const postUserData = (data, callback) => { $.ajax({ url: userUrl, method: "POST", dataType: "json", data: data, success: callback }); }
 const getQuizData = (data, callback) => { $.ajax({ url: quizUrl, method: "GET", dataType: "json", data: data, success: callback }); }
 const postQuizData = (data, callback) => { $.ajax({ url: quizUrl, method: "POST", dataType: "json", data: data, success: callback }); }
+const getClassData = (data, callback) => { $.ajax({ url: classUrl, method: "GET", dataType: "json", data: data, success: callback }); }
+const postClassData = (data, callback) => { $.ajax({ url: classUrl, method: "POST", dataType: "json", data: data, success: callback }); }
 
 (() => {
     $('#new-student').hide();
@@ -51,6 +54,7 @@ function adminLogin(form){
 function adminPortal(user, pass) {
     $('#student-details').html('');
     $('#quiz-details').html('');
+    $('#class-details').html('');
     $('#admin-login-container').hide();
     $('#admin-portal').show();
     localStorage.setItem("user", user);
@@ -60,6 +64,7 @@ function adminPortal(user, pass) {
     data['pswrd'] = pass;
     data['studentList'] = true;
     data['quizList'] = true;
+    data['classList'] = true;
     getUserData(data, o => {
         if (o.correct) {
             let students = '';
@@ -76,6 +81,15 @@ function adminPortal(user, pass) {
                 quizzes += `<div onclick="quizDetails('${quiz[0]}');">${quiz[0]}</div>`
             }
             $('#quiz-list').html(quizzes);
+        }
+    });
+    getClassData(data, o => {
+        if (o.correct) {
+            let classes = '';
+            for (const _class of o.classes) {
+                classes += `<div onclick="classDetails('${_class[0]}');">${_class[0]}</div>`
+            }
+            $('#class-list').html(classes);
         }
     });
 }
@@ -148,10 +162,33 @@ function addQuiz() {
     });
 }
 
+function addClass() {
+    let className = $('#new-class #class-name').val();
+    let data = {};
+    data['user'] = localStorage.getItem("user");
+    data['pswrd'] = localStorage.getItem("pass");
+    data['newClass'] = true;
+    data['Class'] = className;
+    postClassData(data, o => {
+        data['classList'] = true;
+        getClassData(data, o => {
+            if (o.correct) {
+                let classes = '';
+                for (const _class of o.classes) {
+                    classes += `<div onclick="classDetails('${_class[0]}');">${_class[0]}</div>`
+                }
+                $('#class-list').html(classes);
+                $('#new-class').hide();
+            }
+        });
+    });
+}
+
 function reset() {
     $('#admin-portal').hide();
     $('#student-details').hide();
     $('#quiz-details').hide();
+    $('#class-details').hide(); 
     $('#admin-login-container').show();
     localStorage.setItem("user", "");
     localStorage.setItem("pass", "");

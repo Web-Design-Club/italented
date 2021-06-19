@@ -480,65 +480,65 @@ button:focus {
 }
 #admin-portal td {
   padding-left: 0px;
-  padding-right: 200px;
+  padding-right: 100px;
   vertical-align: top;
 }
-#admin-portal #student-heading, #admin-portal #quiz-heading {
+#admin-portal #student-heading, #admin-portal #quiz-heading, #admin-portal #class-heading {
   width: 250px;
   font-size: 24px;
   font-weight: 500;
 }
-#admin-portal #student-heading span, #admin-portal #quiz-heading span {
+#admin-portal #student-heading span, #admin-portal #quiz-heading span, #admin-portal #class-heading span {
   float: right;
 }
-#admin-portal #student-heading span:hover, #admin-portal #quiz-heading span:hover {
+#admin-portal #student-heading span:hover, #admin-portal #quiz-heading span:hover, #admin-portal #class-heading span:hover {
   cursor: pointer;
 }
-#admin-portal #student-list, #admin-portal #quiz-list {
+#admin-portal #student-list, #admin-portal #quiz-list, #admin-portal #class-list {
   margin-top: 24px;
   margin-bottom: 72px;
 }
-#admin-portal #student-list div, #admin-portal #quiz-list div {
+#admin-portal #student-list div, #admin-portal #quiz-list div, #admin-portal #class-list div {
   margin-bottom: 12px;
 }
-#admin-portal #student-list div:hover, #admin-portal #quiz-list div:hover {
+#admin-portal #student-list div:hover, #admin-portal #quiz-list div:hover, #admin-portal #class-list div:hover {
   cursor: pointer;
 }
 
-#student-details, #student-quiz-details, #quiz-details {
+#student-details, #student-quiz-details, #quiz-details, #class-details {
   margin-left: 20vw;
   font-family: Montserrat, Arial;
 }
-#student-details #exit, #student-quiz-details #exit, #quiz-details #exit {
+#student-details #exit, #student-quiz-details #exit, #quiz-details #exit, #class-details #exit {
   position: fixed;
   top: 75px;
   left: 10vw;
   font-size: 36px;
 }
-#student-details #exit:hover, #student-quiz-details #exit:hover, #quiz-details #exit:hover {
+#student-details #exit:hover, #student-quiz-details #exit:hover, #quiz-details #exit:hover, #class-details #exit:hover {
   cursor: pointer;
 }
-#student-details .header, #student-quiz-details .header, #quiz-details .header {
+#student-details .header, #student-quiz-details .header, #quiz-details .header, #class-details .header {
   width: 500px;
   margin-top: 90px;
   font-size: 24px;
   font-weight: 600;
 }
-#student-details .header .btn, #student-quiz-details .header .btn, #quiz-details .header .btn {
+#student-details .header .btn, #student-quiz-details .header .btn, #quiz-details .header .btn, #class-details .header .btn {
   float: right;
 }
-#student-details table, #student-quiz-details table, #quiz-details table {
+#student-details table, #student-quiz-details table, #quiz-details table, #class-details table {
   margin-top: 24px;
   padding-right: 12px;
 }
-#student-details table th, #student-quiz-details table th, #quiz-details table th {
+#student-details table th, #student-quiz-details table th, #quiz-details table th, #class-details table th {
   text-align: left;
   font-weight: 600;
 }
-#student-details table tr:hover, #student-quiz-details table tr:hover, #quiz-details table tr:hover {
+#student-details table tr:hover, #student-quiz-details table tr:hover, #quiz-details table tr:hover, #class-details table tr:hover {
   cursor: pointer;
 }
-#student-details table td, #student-quiz-details table td, #quiz-details table td {
+#student-details table td, #student-quiz-details table td, #quiz-details table td, #class-details table td {
   padding-top: 12px;
   padding-right: 24px;
   font-size: 16px;

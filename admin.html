@@ -40,6 +40,13 @@
                         </div>
                         <div id="quiz-list"></div>
                     </td>
+                    <td>
+                        <div id="class-heading">
+                            Classes
+                            <span onclick="addModal('new-class');">&plus;</span>
+                        </div>
+                        <div id="class-list"></div>
+                    </td>
                 </tr>
             </table>
         </div>
@@ -49,6 +56,8 @@
         <div id="student-quiz-details"></div>
 
         <div id="quiz-details"></div>
+
+        <div id="class-details"></div>
 
         <div id="new-student" class="modal">
             <div class="modal-content">
@@ -80,6 +89,15 @@
             </div>
         </div>
 
+        <div id="new-class" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div>Class Name</div>
+                <input type="text" id="class-name" class="short-answer"><br>
+                <input type="button" onclick="addClass();" value="OK" class="btn"/>
+            </div>
+        </div>
+
         <div id="assign-quiz" class="modal">
             <div class="modal-content">
                 <span class="close">&times;</span>
@@ -90,8 +108,27 @@
             </div>
         </div>
 
+        <div id="add-student" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="add-class-students"></div>
+                <input type="button" onclick="addClassStudent();" value="OK" class="btn"/>
+            </div>
+        </div>
+
+        <div id="add-quiz" class="modal">
+            <div class="modal-content">
+                <span class="close">&times;</span>
+                <div id="add-class-quizzes"></div>
+                <div>Time Limit</div>
+                <input type="text" id="time-limit" class="short-answer"><br>
+                <input type="button" onclick="addClassQuiz();" value="OK" class="btn"/>
+            </div>
+        </div>
+
         <script src="scripts/admin/student.js"></script>
         <script src="scripts/admin/quiz.js"></script>
+        <script src="scripts/admin/class.js"></script>
         <script src="scripts/admin/admin.js"></script>
     </body>
 </html>
