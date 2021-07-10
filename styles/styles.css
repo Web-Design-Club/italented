@@ -505,53 +505,54 @@ button:focus {
   cursor: pointer;
 }
 
-#student-details, #student-quiz-details, #quiz-details, #class-details {
+#student-details, #student-quiz-details, #quiz-details, #class-details, #class-student-details, #class-quiz-details {
   margin-left: 20vw;
   font-family: Montserrat, Arial;
 }
-#student-details #exit, #student-quiz-details #exit, #quiz-details #exit, #class-details #exit {
+#student-details #exit, #student-quiz-details #exit, #quiz-details #exit, #class-details #exit, #class-student-details #exit, #class-quiz-details #exit {
   position: fixed;
   top: 75px;
   left: 10vw;
   font-size: 36px;
 }
-#student-details #exit:hover, #student-quiz-details #exit:hover, #quiz-details #exit:hover, #class-details #exit:hover {
+#student-details #exit:hover, #student-quiz-details #exit:hover, #quiz-details #exit:hover, #class-details #exit:hover, #class-student-details #exit:hover, #class-quiz-details #exit:hover {
   cursor: pointer;
 }
-#student-details .header, #student-quiz-details .header, #quiz-details .header, #class-details .header {
+#student-details .header, #student-quiz-details .header, #quiz-details .header, #class-details .header, #class-student-details .header, #class-quiz-details .header {
   width: 500px;
   margin-top: 90px;
   font-size: 24px;
   font-weight: 600;
 }
-#student-details .header .btn, #student-quiz-details .header .btn, #quiz-details .header .btn, #class-details .header .btn {
+#student-details .header .btn, #student-quiz-details .header .btn, #quiz-details .header .btn, #class-details .header .btn, #class-student-details .header .btn, #class-quiz-details .header .btn {
   float: right;
 }
-#student-details table, #student-quiz-details table, #quiz-details table, #class-details table {
+#student-details table, #student-quiz-details table, #quiz-details table, #class-details table, #class-student-details table, #class-quiz-details table {
   margin-top: 24px;
   padding-right: 12px;
 }
-#student-details table th, #student-quiz-details table th, #quiz-details table th, #class-details table th {
+#student-details table th, #student-quiz-details table th, #quiz-details table th, #class-details table th, #class-student-details table th, #class-quiz-details table th {
   text-align: left;
   font-weight: 600;
 }
-#student-details table tr:hover, #student-quiz-details table tr:hover, #quiz-details table tr:hover, #class-details table tr:hover {
+#student-details table tr:hover, #student-quiz-details table tr:hover, #quiz-details table tr:hover, #class-details table tr:hover, #class-student-details table tr:hover, #class-quiz-details table tr:hover {
   cursor: pointer;
 }
-#student-details table td, #student-quiz-details table td, #quiz-details table td, #class-details table td {
+#student-details table td, #student-quiz-details table td, #quiz-details table td, #class-details table td, #class-student-details table td, #class-quiz-details table td {
   padding-top: 12px;
   padding-right: 24px;
   font-size: 16px;
 }
 
-#student-quiz-details {
-  margin-right: 20vw;
-  font-size: 20px;
-}
-#student-quiz-details #name {
+#student-quiz-details #name, #class-student-details #name, #class-quiz-details #name {
   margin-top: 40px;
   font-size: 32px;
   font-weight: 600;
+}
+
+#student-quiz-details {
+  margin-right: 20vw;
+  font-size: 20px;
 }
 #student-quiz-details #details {
   margin-top: 24px;

@@ -17,7 +17,7 @@ function classDetails(_class) {
     getClassData(data, o => {
         if (o.correct) {
             for (const student of o.details[0].slice(1)) {
-                details += `<tr><td>${student}</td></tr>`;
+                details += `<tr onclick="classStudentDetails('${_class}', '${student}');"><td>${student}</td></tr>`;
             }
             details += `
                 </table>
@@ -25,7 +25,7 @@ function classDetails(_class) {
                 <tr><th>Quiz</th></tr>
             `;
             for (const quiz of o.details[1].slice(1)) {
-                details += `<tr><td>${quiz}</td></tr>`;
+                details += `<tr onclick="classQuizDetails('${_class}', '${quiz}');"><td>${quiz}</td></tr>`;
             }
             details += `
                 </table>
@@ -154,6 +154,72 @@ function addClassQuiz() {
     });
 }
 
+function classStudentDetails(_class, student) {
+    $('#class-details').hide();
+    let details = `
+        <span id="exit" onclick="exitClassStudentDetails();">&leftarrow;</span>
+        <div class="header">${_class}</div>
+        <div id="name">${student}</div>
+        <table>
+            <tr><th>Quiz</th><th>Score</th><th>Time Limit</th></tr>
+    `;
+    let data = {};
+    data['studentDetails'] = student;
+    data['user'] = localStorage.getItem("user");
+    data['pswrd'] = localStorage.getItem("pass");
+    getUserData(data, o => {
+        if (o.correct) {
+            for (const row of o.details.slice(1)) {
+                details += `<tr><td>${row[0]}</td><td>${row[3]}</td><td>${row[1]}</td></tr>`;
+            }
+            details += `</table>`;
+            $('#class-student-details').html(details);
+            $('#class-student-details').show();
+            localStorage.setItem('student', student);
+        } else {
+            exitClassStudentDetails();
+        }
+    });
+}
+
+function classQuizDetails(_class, quiz) {
+    $('#class-details').hide();
+    let details = `
+        <span id="exit" onclick="exitClassQuizDetails();">&leftarrow;</span>
+        <div class="header">${_class}</div>
+        <div id="name">${quiz}</div>
+        <table>
+            <tr><th>Name</th><th>Score</th><th>Time Limit</th></tr>
+    `;
+    let data = {};
+    data['quizDetails'] = quiz;
+    data['user'] = localStorage.getItem("user");
+    data['pswrd'] = localStorage.getItem("pass");
+    getQuizData(data, o => {
+        if (o.correct) {
+            for (const row of o.details.slice(1)) {
+                details += `<tr><td>${row[0]}</td><td>${row[3]}</td><td>${row[1]}</td></tr>`;
+            }
+            details += `</table>`;
+            $('#class-quiz-details').html(details);
+            $('#class-quiz-details').show();
+            localStorage.setItem('quiz', quiz);
+        } else {
+            exitClassQuizDetails();
+        }
+    });
+}
+
 function exitClassDetails() {
     adminPortal(localStorage.getItem("user"), localStorage.getItem("pass"));
+}
+
+function exitClassStudentDetails() {
+    $('#class-student-details').html('');
+    $('#class-details').show();
+}
+
+function exitClassQuizDetails() {
+    $('#class-quiz-details').html('');
+    $('#class-details').show();
 }

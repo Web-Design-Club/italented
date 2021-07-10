@@ -71,7 +71,7 @@ $left-offset: 20vw;
     }
 }
 
-#student-details, #student-quiz-details, #quiz-details, #class-details {
+#student-details, #student-quiz-details, #quiz-details, #class-details, #class-student-details, #class-quiz-details {
     margin-left: $left-offset;
     font-family: $font;
 
@@ -120,15 +120,17 @@ $left-offset: 20vw;
     }
 }
 
-#student-quiz-details {
-    margin-right: $left-offset;
-    font-size: 20px;
-
+#student-quiz-details, #class-student-details, #class-quiz-details {
     #name {
         margin-top: 40px;
         font-size: 32px;
         font-weight: 600;
     }
+}
+
+#student-quiz-details {
+    margin-right: $left-offset;
+    font-size: 20px;
 
     #details {
         margin-top: 24px;
