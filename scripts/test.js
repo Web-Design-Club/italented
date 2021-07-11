@@ -17,9 +17,7 @@ function exit() {
     const wrongPoints = localStorage.getItem("incorrect-points");
 
     //Time in seconds for countdown timer
-    const totalTime = localStorage.getItem("time-limit") * 60;
-
-    var time = totalTime;
+    var time = 0;
     var finished = false;
     
     //Multiple choice questions per page
@@ -84,7 +82,7 @@ function exit() {
                 $(`#question${q}`).hide();
                 $(`#image${q}`).hide();
                 $(`#answers${q}`).hide();
-                //$(`#questionButton${q}`).hide();
+                $(`#questionButton${q}`).hide();
             }
 
             // building timer/counter
@@ -97,11 +95,14 @@ function exit() {
                 success: function (o) {
                     o.details.forEach((item, i) => {
                         if (i > 0 && item[0] === quiz) {
-                            if (item[2]) {
-                                time = totalTime - (Date.now() - item[2]) / 1000;
+                            let currentdate = new Date();
+                            //item[1] is time limit on spreadsheet: checks if item[1] exists on spreadsheet
+                            if (item[1]) {
+                                totalTime = item[1] * 60
+                                time = totalTime
+
                             } else {
                                 // api call to store start time
-                                let currentdate = new Date();
                                 let startTime = (currentdate.getMonth() + 1)
                                 + "/" + currentdate.getDate() + "/" + currentdate.getFullYear() + " @ " 
                                 + currentdate.getHours() + ":" 
@@ -121,6 +122,7 @@ function exit() {
                                     }
                                 });
                             }
+                            //loop for the timer
                             var count = setInterval(function() {
                                 if (finished) {
                                     clearInterval(count);
@@ -128,13 +130,13 @@ function exit() {
                                 if (time == 0) {
                                     finished = true;
                                     showResults();
-                                    // location.href = `dashboard.html`;
-                                    // alert("Test Finished: Answers have been submitted");
                                 } else {
                                     time--;
                                 }
-                                document.getElementById("timer").innerHTML = new Date(time * 1000);
-                            }, 1000);
+                                minutes = Math.floor(time/60)
+                                seconds = time%60
+                                document.getElementById("timer").innerHTML = minutes + ":" + seconds;
+                            }, 1000); //sets the interval time to 1 second
                         }
                     })
                 }
