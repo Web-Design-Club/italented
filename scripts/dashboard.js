@@ -38,7 +38,7 @@ function loadQuiz(q, t) {
     data['user'] = user;
     data['pswrd'] = pswrd;
     $.ajax({
-        url: 'https://script.google.com/macros/s/AKfycbwqvNVeFbXM7mRUniqGfoO-KDfCNn0dpWZH1COiiLh5SPvs9Ig/exec',
+        url: 'https://script.google.com/macros/s/AKfycbxSEeuNlH9weJQDUvz7UtR-KgER_WbUwdNVL1u0OtJ31TZbLkLowu26RMSILPMAbL33/exec',
         method: "GET",
         dataType: "json",
         data: data,
@@ -64,10 +64,10 @@ function loadQuiz(q, t) {
                             </tr>`;
             for (let i = 1; i < details.length; i++) {
                 if (details[i] != '') {
-                    if (details[i][3] === "") {
-                        dashboard += `<tr class="clickable" onclick="loadQuiz('${details[i][0]}', ${details[i][1]});">
-                            <td id="quiz${i}">${details[i][0]}</td>
-                            <td>${details[i][1]}</td>
+                    if (details[i][4] === "") {
+                        dashboard += `<tr class="clickable" onclick="loadQuiz('${details[i][1]}', ${details[i][2]});">
+                            <td id="quiz${i}">${details[i][1]}</td>
+                            <td>${details[i][2]}</td>
                             <td></td>
                         </tr>`;
                     }
@@ -86,11 +86,11 @@ function loadQuiz(q, t) {
                             </tr>`;
             for (let i = 1; i < details.length; i++) {
                 if (details[i] != '') {
-                    if (details[i][3] !== "") {
+                    if (details[i][4] !== "") {
                         dashboard += `<tr>
-                            <td id="quiz${i}">${details[i][0]}</td>
+                            <td id="quiz${i}">${details[i][1]}</td>
                             <td>Graded</td>
-                            <td>${details[i][3]}</td>
+                            <td>${details[i][4]}</td>
                         </tr>`;
                     }
                 }
@@ -102,6 +102,15 @@ function loadQuiz(q, t) {
             $('#dashboard').html(dashboard);
             $("#loadButtons").hide();
             localStorage.setItem('name', o.student);
+
+            let classes = [];
+            for (let i = 1; i < details.length; i++) {
+                if (details[i][0] == '') {
+                    break;
+                }
+                classes.push(details[i][0]);
+            }
+            console.log(classes);
         }
     });
 })();

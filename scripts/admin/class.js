@@ -121,7 +121,10 @@ function addClassStudent() {
         student['Name'] = c.value;
         data['students'].push(student);
     }
-    postClassData(data, o => $('#add-student').hide());
+    postClassData(data, o => {
+        data['classAssign'] = data['addStudent'];
+        postUserData(data, o => $('#add-student').hide());
+    });
 }
 
 function addClassQuiz() {
@@ -170,7 +173,7 @@ function classStudentDetails(_class, student) {
     getUserData(data, o => {
         if (o.correct) {
             for (const row of o.details.slice(1)) {
-                details += `<tr><td>${row[0]}</td><td>${row[3]}</td><td>${row[1]}</td></tr>`;
+                details += `<tr><td>${row[1]}</td><td>${row[4]}</td><td>${row[2]}</td></tr>`;
             }
             details += `</table>`;
             $('#class-student-details').html(details);
