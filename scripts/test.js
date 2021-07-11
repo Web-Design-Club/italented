@@ -29,32 +29,11 @@ function exit() {
     let totalPages = 0;
     let totalQuestions = 0;
 
-    // short answer questions array
-    const shortAnswerQuestions = [];
-    //shortAnswerQuestions.push({question: "What is 1.25*2?", correctAnswer: ["5/2","2.5"], answer: ""});
-    // const shortAnswerQuestions = [
-    //     {
-    //         question: "What is 1.25*2?",
-    //         correctAnswer: ["5/2","2.5"],
-    //         answer: ""
-    //     },
-    //     {
-    //         question: "How many degrees does a circle have?",
-    //         correctAnswer: ["360","360 degrees","360 degree"],
-    //         answer: ""
-    //     },
-    //     {
-    //         question: "What is 1+1?",
-    //         correctAnswer: ["2"],
-    //         answer: ""
-    //     }
-    // ];
-
     function setup(questions) {
         function buildQuiz() {
             let quizHtml = ``;
             let questionListHtml = ``;
-            let numOfMult = questions.length;
+            totalPages = Math.ceil(questions.length/5);
 
             for (let i = 0; i < questions.length; i++) {
                 const question = questions[i];
@@ -63,14 +42,10 @@ function exit() {
 
                 //if the question is a frq
                 if (question.answers["a"] == "frq"){
-
                     answers +=
                     `<label id="shortAnswerLabel${i+1}">
                         <input type="text" class="short-answer shortAnswersBoxes" name="shortAnswers${i+1}">
                     </label>`;
-
-
-
                 }
                 //if the question is a mcq
                 else{
@@ -98,15 +73,18 @@ function exit() {
                 questionListHtml += `<div class="questionButton" id="questionButton${i+1}"><a href="#question${i+1}">${i+1}</a></div>`;
                 
             }
+            //adds the questions
             $('#title').html(localStorage.getItem("quiz"));
             $('#quiz').html(quizHtml);
             $('#questionList').html(questionListHtml);
             console.log(questionListHtml);
+
+            //hides all questions once initialized
             for (let q = pageSize+1; q <= questions.length; q++){
                 $(`#question${q}`).hide();
                 $(`#image${q}`).hide();
                 $(`#answers${q}`).hide();
-                $(`#questionButton${q}`).hide();
+                //$(`#questionButton${q}`).hide();
             }
 
             // building timer/counter
@@ -155,91 +133,12 @@ function exit() {
                                 } else {
                                     time--;
                                 }
-                                document.getElementById("timer").innerHTML = new Date(time * 1000).toISOString().substr(11,8);
+                                document.getElementById("timer").innerHTML = new Date(time * 1000);
                             }, 1000);
                         }
                     })
                 }
             });
-
-            buildAllShortAnswers(numOfMult);
-        }
-
-        // build one short answer question
-        function buildShortAnswersOneByOne(questionNumber,numOfMult) {
-            let shortAnswersQuiz = '';
-            let shortAnswersInput = '';
-            
-            shortAnswersInput += 
-                `<label id="shortAnswerLabel${questionNumber}">
-                    <input type="text" class="short-answer shortAnswersBoxes" name="shortAnswers${questionNumber}">
-                </label>`;
-
-            shortAnswersQuiz += 
-                `<div class="shortAnswerQuestions" name="answerBox${questionNumber}" id="question${questionNumber+numOfMult+1}"> ${questionNumber+numOfMult+1}. ${shortAnswerQuestions[questionNumber].question} </div>
-                <div class="shortAnswersInput" id="answers${questionNumber+numOfMult+1}"> ${shortAnswersInput} </div>`
-
-            return shortAnswersQuiz;
-        }
-
-        // build all short answer questions
-        function buildAllShortAnswers(numOfMult) {
-            let allShortAnswers = '';
-            for (let i = 0; i < shortAnswerQuestions.length; i++) {
-                allShortAnswers += buildShortAnswersOneByOne(i, numOfMult);
-            }
-            $('#shortAnswersQuiz').html(allShortAnswers);
-            
-            totalQuestions = numOfMult + shortAnswerQuestions.length;
-            totalPages = Math.ceil(totalQuestions/5);
-            for (let q = pageSize+1; q <= numOfMult + shortAnswerQuestions.length; q++) {
-                $(`#question${q}`).hide();
-                $(`#image${q}`).hide();
-                $(`#answers${q}`).hide();
-            }
-        }
-
-        // get short answer results
-        function getShortAnswerResults() {
-            let numCorrect = 0;
-            let numBlank = 0;
-            let numWrong = 0;
-
-            let allShortAnswers = [];
-            for (let i = 0; i < shortAnswerQuestions.length; i++) {
-                allShortAnswers.push(document.getElementsByName(`shortAnswers${i}`)[0].value);
-            }
-            for (let i = 0; i < allShortAnswers.length; i++) {
-                // lock short answer boxes
-                document.getElementsByName(`shortAnswers${i}`)[0].disabled = true;
-
-                let answer = allShortAnswers[i];
-                const rect = document.getElementById(`shortAnswerLabel${i}`);
-                const questionText = document.getElementsByName(`answerBox${i}`)[0];
-                for (let j = 0; j < shortAnswerQuestions[i].correctAnswer.length; j++) {
-                    rect.style.width = "330px";
-                    rect.style.height = "50px";
-                    if (answer === shortAnswerQuestions[i].correctAnswer[j]) {
-                        numCorrect++;
-                        rect.style.backgroundColor = 'rgb(121, 203, 69, .5)';
-                        break;
-                    } else if (answer === '') {
-                        numBlank++;
-                        rect.style.backgroundColor = 'rgb(255, 210, 49, .5)';
-                        // questionText.style.color = "red";
-                        break;
-                    } else {
-                        if (j === shortAnswerQuestions[i].correctAnswer.length-1) {
-                            numWrong++;
-                            rect.style.backgroundColor = 'rgb(217, 60, 33, 0.5)';
-                            // questionText.style.color = "red";
-                        }
-                    }
-                }
-            }
-
-            let results = [numCorrect, numBlank, numWrong];
-            return results;
         }
 
         // show results
@@ -249,6 +148,7 @@ function exit() {
 
             $('.mc').removeClass('open');
 
+            //data[`FIELD`] will correspond to the same FIELD on the google sheet for "Admin Portal -Users" 
             var data = {};
             let numCorrect = 0;
             let numBlank = 0;
@@ -256,7 +156,7 @@ function exit() {
 
             //Time taken for the test
             finished = true;
-            data[`Time`] = new Date((totalTime - time) * 1000).toISOString().substr(11,8);
+            data[`Time`] = new Date((totalTime - time) * 1000);
 
             for (let i = 0; i < questions.length; i++) {
                 const question = questions[i];
@@ -342,17 +242,12 @@ function exit() {
                     }
                     
                 }
+                //adds the question and the test taker's answer
                 data[`Question ${i+1}`] = userAnswer;
             }
 
-            getShortAnswerResults();
-
             // calculate score
-            let shortAnswerResults = getShortAnswerResults();
-            numCorrect += shortAnswerResults[0];
-            numBlank += shortAnswerResults[1];
-            numWrong += shortAnswerResults[2];
-            let totalPoints = (questions.length + shortAnswerQuestions.length) * correctPoints;
+            let totalPoints = questions.length * correctPoints;
             let score = numCorrect * correctPoints + numBlank * blankPoints + numWrong * wrongPoints;
             
             let percentage = Math.round(score*100/totalPoints);
@@ -602,6 +497,8 @@ function exit() {
         $('#quiz-container').show();
         $('#viewQuizResults').hide();
     }
+    //goes through each question, hiding selected questions while showing the next few selected
+    //Change variable pageSize to adjust amount of questions per page
     function nextPage(){
         if (currentPage < totalPages-1){
             for (let q = 1; q < pageSize+1; q++){

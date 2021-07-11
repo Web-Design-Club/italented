@@ -22,10 +22,7 @@ function exit() {
     var results = new Array();
     
     function setup(questions) {
-
-
-
-
+        //goes through each question and adds
         function buildQuiz() {
             let quizHtml = ``;
 
@@ -91,6 +88,7 @@ function exit() {
         $('#next').click(nextPage);
         $('#previous').click(previousPage);
 
+        //deals with the next and previous page buttons during certain pages
         if (currentPage == 0) {
             $('#previous').prop('disabled', true);
         } else {
